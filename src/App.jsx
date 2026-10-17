@@ -1,21 +1,27 @@
+import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
+import './Shop.css'
+import Shop from './Shop.jsx'
 import heroImage from './assets/lumora-hero.png'
+
 
 function App() {
   return (
     <>
       {/* Navigation bar */}
       <header className="navbar">
-        <a href="#home" className="logo">
+        
+        <Link to="/" className="logo">
           LUMORA<span>.</span>
-        </a>
+        </Link>
 
         <nav className="nav-links">
-          <a href="#home">Home</a>
-          <a href="#shop">Shop</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact Us</a>
+          <Link to="/">Home</Link>
+          <Link to="/shop">Shop</Link>
+          <a href="/#about">About</a>
+          <a href="/#contact">Contact Us</a>
         </nav>
+
 
         <div className="nav-actions">
           <button className="icon-button" aria-label="Search">
@@ -38,8 +44,9 @@ function App() {
       </header>
 
       {/* Hero section */}
-      <main>
-        <section className="hero" id="home">
+    <Routes>
+    <Route path="/" element={<main>
+      <section className="hero" id="home">
           <div className="hero-content">
             <p className="hero-label">
               PURE <span>•</span> NATURAL <span>•</span> EFFECTIVE
@@ -53,9 +60,9 @@ function App() {
               for your natural glow.
             </p>
 
-            <a href="#shop" className="shop-button">
-              Shop Now <span aria-hidden="true">→</span>
-            </a>
+            <Link to="/shop" className="shop-button">
+            Shop Now <span aria-hidden="true">→</span>
+            </Link>
           </div>
 
           <div className="hero-image">
@@ -321,10 +328,13 @@ function App() {
           </div>
         </section>
 
-      </main>
-            {/* Footer */}
-      <footer className="footer">
-        <div className="footer-container">
+      </main>} />
+
+        <Route path="/shop" element={<Shop />} />
+    </Routes>
+
+    {/* Footer */}
+    <footer className="footer">
 
           {/* Left Side: Brand */}
           <div className="footer-brand">
@@ -380,7 +390,6 @@ function App() {
             </div>
 
           </div>
-        </div>
 
         {/* Copyright */}
         <div className="footer-bottom">
