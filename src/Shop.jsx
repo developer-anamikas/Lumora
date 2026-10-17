@@ -1,7 +1,7 @@
-
+import { Link } from 'react-router-dom'
 import './Shop.css'
 
-const products = [
+export const products = [
   {
     category: 'Cleansers',
     items: [
@@ -61,35 +61,41 @@ function Shop() {
         <p>Skincare for your everyday routine.</p>
       </header>
 
-      {products.map((category) => (
-        <section className="shop-category" key={category.category}>
-          <h2>{category.category}</h2>
+        {products.map((category) => (
+            <section className="shop-category" key={category.category}>
+                <h2>{category.category}</h2>
 
-          <div className="shop-product-grid">
-            {category.items.map((product) => (
-              <article className="shop-product-card" key={product.name}>
-                <div className="shop-product-image">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    loading="lazy"
-                  />
-                </div>
+                <div className="shop-product-grid">
+                {category.items.map((product) => (
+                    <Link
+                    to={`/product/${encodeURIComponent(product.name)}`}
+                    className="shop-product-link"
+                    key={product.name}
+                    >
+                    <article className="shop-product-card">
+                        <div className="shop-product-image">
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            loading="lazy"
+                        />
+                        </div>
 
-                <div className="shop-product-info">
-                  <h3>{product.name}</h3>
-                  <p className="shop-product-rating">
-                    <span>★</span> {product.rating} / 5
-                  </p>
-                  <p className="shop-product-price">
-                    ₹{product.price}
-                  </p>
+                        <div className="shop-product-info">
+                        <h3>{product.name}</h3>
+                        <p className="shop-product-rating">
+                            <span>★</span> {product.rating} / 5
+                        </p>
+                        <p className="shop-product-price">
+                            ₹{product.price}
+                        </p>
+                        </div>
+                    </article>
+                    </Link>
+                ))}
                 </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      ))}
+            </section>
+        ))}
     </main>
   )
 }

@@ -1,3 +1,4 @@
+import ProductDetails from './ProductDetails.jsx'
 import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
 import './Shop.css'
@@ -328,16 +329,23 @@ function App() {
           </div>
         </section>
 
+      
       </main>} />
 
-        <Route path="/shop" element={<Shop />} />
+      <Route path="/shop" element={<Shop />} />
+
+      <Route
+        path="/product/:productName"
+        element={<ProductDetails />}
+      />
     </Routes>
+
 
     {/* Footer */}
     <footer className="footer">
 
           {/* Left Side: Brand */}
-          <div className="footer-brand">
+          <div className="footer-brand"id="about">
             <h2>Lumora.</h2>
             <p>
               Simple skincare, thoughtfully made for your everyday routine.
@@ -357,7 +365,7 @@ function App() {
               </div>
             </div>
 
-            <div className="footer-contact">
+            <div className="footer-contact" id="contact">
               <h3>Contact Us</h3>
               <p>Address: Kolkata, West Bengal, India</p>
               <p>Phone: +91 XXXXX XXXXX</p>
