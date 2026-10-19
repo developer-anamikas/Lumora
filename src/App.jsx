@@ -360,7 +360,7 @@ function App() {
               <h3>Quick Links</h3>
               <div className="footer-links">
                 <a href="#home">Home</a>
-                <a href="#products">Shop</a>
+                <Link to="/shop">Shop</Link>
                 <a href="#reviews">Reviews</a>
               </div>
             </div>
