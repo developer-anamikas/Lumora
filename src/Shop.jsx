@@ -62,8 +62,12 @@ function Shop() {
       </header>
 
         {products.map((category) => (
-            <section className="shop-category" key={category.category}>
-                <h2>{category.category}</h2>
+            <section
+              className="shop-category"
+              id={category.category.toLowerCase().replace(/\s+/g, '-')}
+              key={category.category}
+            >
+              <h2>{category.category}</h2>
 
                 <div className="shop-product-grid">
                 {category.items.map((product) => (

@@ -85,7 +85,7 @@ function App() {
           </div>
 
           <div className="category-grid">
-            <a href="#products-cleansers" className="category-card">
+            <a href="/shop#cleansers" className="category-card">
               <div className="category-image">
                 <img
                   src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=700&q=85"
@@ -100,7 +100,7 @@ function App() {
               </div>
             </a>
 
-            <a href="#products-serums" className="category-card">
+            <a href="/shop#serums" className="category-card">
               <div className="category-image">
                 <img
                   src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=700&q=85"
@@ -115,7 +115,7 @@ function App() {
               </div>
             </a>
 
-            <a href="#products-moisturizers" className="category-card">
+            <a href="/shop#moisturizers"className="category-card">
               <div className="category-image">
                 <img
                   src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=700&q=85"
@@ -130,7 +130,7 @@ function App() {
               </div>
             </a>
 
-            <a href="#products-sunscreens" className="category-card">
+            <a href="/shop#sunscreens" className="category-card">
               <div className="category-image">
                 <img
                   src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=85"
@@ -145,7 +145,7 @@ function App() {
               </div>
             </a>
             {/* Lip Care */}
-            <a href="#products-lip-care" className="category-card">
+            <a href="/shop#lip-care" className="category-card">
               <div className="category-image">
                 <img
                   src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=700&q=85"
@@ -161,7 +161,7 @@ function App() {
             </a>
 
             {/* Face Wash */}
-            <a href="#products-face-wash" className="category-card">
+            <a href="/shop#face-wash" className="category-card">
               <div className="category-image">
                 <img
                   src="https://images.unsplash.com/photo-1745141063798-7fa04698ea80?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D"
