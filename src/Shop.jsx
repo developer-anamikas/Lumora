@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import './Shop.css'
 
 export const products = [
@@ -53,6 +54,24 @@ export const products = [
 ]
 
 function Shop() {
+      const location = useLocation()
+
+    useEffect(() => {
+      const categoryId = decodeURIComponent(
+        location.hash.slice(1)
+      )
+
+      if (!categoryId) return
+
+      const timer = setTimeout(() => {
+        document.getElementById(categoryId)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      }, 100)
+
+      return () => clearTimeout(timer)
+    }, [location.hash])
   return (
     <main className="all-products-page">
       <header className="all-products-heading">
