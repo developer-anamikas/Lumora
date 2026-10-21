@@ -126,14 +126,6 @@ function App() {
 
 
         <div className="nav-actions">
-          <button className="icon-button" aria-label="Search">
-            <svg viewBox="0 0 24 24" width="21" height="21"
-              fill="none" stroke="currentColor" strokeWidth="1.7">
-              <circle cx="10.8" cy="10.8" r="6.8" />
-              <path d="m16 16 4.2 4.2" />
-            </svg>
-          </button>
-
           <Link to="/cart" className="icon-button cart-icon-button" aria-label="Shopping cart">
             <svg viewBox="0 0 24 24" width="21" height="21"
               fill="none" stroke="currentColor" strokeWidth="1.7">
