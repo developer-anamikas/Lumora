@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Cart from './pages/Cart.jsx'
 import ProductDetails from './pages/ProductDetails.jsx'
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import './App.css'
 import Shop from './pages/Shop.jsx'
 import heroImage from './assets/lumora-hero.png'
@@ -48,6 +48,13 @@ const featuredProducts = [
 
 function App() {
   const [cart, setCart] = useState(getSavedCart)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const location = useLocation()
+  const [prevPath, setPrevPath] = useState(location.pathname)
+  if (prevPath !== location.pathname) {
+    setPrevPath(location.pathname)
+    setIsMenuOpen(false)
+  }
 
   useEffect(() => {
     const syncCart = () => setCart(getSavedCart())
@@ -99,20 +106,20 @@ function App() {
       {/* Navigation bar */}
       <header className="navbar">
         
-        <Link to="/" className="logo">
+        <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>
           LUMORA<span>.</span>
         </Link>
 
-        <nav className="nav-links">
-          <Link to="/">Home</Link>
-          <Link to="/shop">Shop</Link>
-          <a href="/#about">About</a>
-          <a href="/#contact">Contact Us</a>
+        <nav className={`nav-links ${isMenuOpen ? 'nav-open' : ''}`}>
+          <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
+          <Link to="/shop" onClick={() => setIsMenuOpen(false)}>Shop</Link>
+          <a href="/#about" onClick={() => setIsMenuOpen(false)}>About</a>
+          <a href="/#contact" onClick={() => setIsMenuOpen(false)}>Contact Us</a>
         </nav>
 
 
         <div className="nav-actions">
-          <Link to="/cart" className="icon-button cart-icon-button" aria-label="Shopping cart">
+          <Link to="/cart" className="icon-button cart-icon-button" aria-label="Shopping cart" onClick={() => setIsMenuOpen(false)}>
             <svg viewBox="0 0 24 24" width="21" height="21"
               fill="none" stroke="currentColor" strokeWidth="1.7">
               <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 8H6" />
@@ -123,6 +130,27 @@ function App() {
               <span className="cart-badge">{cartCount}</span>
             )}
           </Link>
+
+          <button
+            type="button"
+            className="icon-button hamburger-btn"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? (
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <line x1="4" y1="7" x2="20" y2="7" />
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="17" x2="20" y2="17" />
+              </svg>
+            )}
+          </button>
         </div>
       </header>
 
