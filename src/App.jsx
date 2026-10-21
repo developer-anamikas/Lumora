@@ -7,28 +7,106 @@ import './Shop.css'
 import Shop from './Shop.jsx'
 import heroImage from './assets/lumora-hero.png'
 
-function getSavedCartCount() {
+const featuredProducts = [
+  {
+    name: 'Gentle Daily Cleanser',
+    category: 'CLEANSER',
+    tag: 'BESTSELLER',
+    price: 499,
+    description: 'A fresh start for your daily skincare routine.',
+    image:
+      'https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=700&q=85',
+  },
+  {
+    name: 'Radiance Face Serum',
+    category: 'SERUM',
+    tag: 'POPULAR',
+    price: 699,
+    description: 'Lightweight care for a healthy-looking glow.',
+    image:
+      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=700&q=85',
+  },
+  {
+    name: 'Hydrating Face Cream',
+    category: 'MOISTURIZER',
+    tag: '',
+    price: 599,
+    description: 'Everyday moisture for soft, comfortable skin.',
+    image:
+      'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=700&q=85',
+  },
+  {
+    name: 'Daily Shield Sunscreen',
+    category: 'SUNSCREEN',
+    tag: 'DAILY ESSENTIAL',
+    price: 549,
+    description: 'An everyday essential for your sun-care routine.',
+    image:
+      'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=85',
+  },
+]
+
+function getSavedCart() {
   try {
     const saved = JSON.parse(localStorage.getItem('lumora-cart'))
-    if (!Array.isArray(saved)) return 0
-    return saved.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0)
+    return Array.isArray(saved) ? saved : []
   } catch {
-    return 0
+    return []
   }
 }
 
 function App() {
-  const [cartCount, setCartCount] = useState(getSavedCartCount)
+  const [cart, setCart] = useState(getSavedCart)
 
   useEffect(() => {
-    const updateCount = () => setCartCount(getSavedCartCount())
-    window.addEventListener('lumora-cart-updated', updateCount)
-    window.addEventListener('storage', updateCount)
+    const syncCart = () => setCart(getSavedCart())
+    window.addEventListener('lumora-cart-updated', syncCart)
+    window.addEventListener('storage', syncCart)
     return () => {
-      window.removeEventListener('lumora-cart-updated', updateCount)
-      window.removeEventListener('storage', updateCount)
+      window.removeEventListener('lumora-cart-updated', syncCart)
+      window.removeEventListener('storage', syncCart)
     }
   }, [])
+
+  const cartCount = cart.reduce(
+    (sum, item) => sum + (Number(item.quantity) || 0),
+    0
+  )
+
+  const updateCartItem = (product, newQuantity) => {
+    const validQty = Math.max(0, newQuantity)
+    const currentCart = getSavedCart()
+    let updatedCart
+
+    if (validQty === 0) {
+      updatedCart = currentCart.filter((item) => item.name !== product.name)
+    } else {
+      const index = currentCart.findIndex((item) => item.name === product.name)
+      if (index > -1) {
+        updatedCart = currentCart.map((item, idx) =>
+          idx === index ? { ...item, quantity: validQty } : item
+        )
+      } else {
+        updatedCart = [
+          ...currentCart,
+          {
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: validQty,
+          },
+        ]
+      }
+    }
+
+    try {
+      localStorage.setItem('lumora-cart', JSON.stringify(updatedCart))
+      setCart(updatedCart)
+      window.dispatchEvent(new Event('lumora-cart-updated'))
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   return (
     <>
@@ -215,96 +293,79 @@ function App() {
           </div>
 
           <div className="product-grid">
-            {/* Product 1 */}
-            <div className="product-card">
-              <div className="product-image">
-                <img
-                  src="https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=700&q=85"
-                  alt="Gentle Daily Cleanser"
-                  loading="lazy"
-                />
-                <span className="product-tag">BESTSELLER</span>
-              </div>
-              <div className="product-info">
-                <p className="product-category">CLEANSER</p>
-                <h3>Gentle Daily Cleanser</h3>
-                <p className="product-description">
-                  A fresh start for your daily skincare routine.
-                </p>
-                <div className="product-bottom">
-                  <span className="product-price">₹499</span>
-                  <button className="add-to-cart">Add to Cart +</button>
-                </div>
-              </div>
-            </div>
+            {featuredProducts.map((product) => {
+              const cartItem = cart.find((item) => item.name === product.name)
+              const quantity = cartItem ? cartItem.quantity : 0
 
-            {/* Product 2 */}
-            <div className="product-card">
-              <div className="product-image">
-                <img
-                  src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=700&q=85"
-                  alt="Radiance Face Serum"
-                  loading="lazy"
-                />
-                <span className="product-tag">POPULAR</span>
-              </div>
-              <div className="product-info">
-                <p className="product-category">SERUM</p>
-                <h3>Radiance Face Serum</h3>
-                <p className="product-description">
-                  Lightweight care for a healthy-looking glow.
-                </p>
-                <div className="product-bottom">
-                  <span className="product-price">₹699</span>
-                  <button className="add-to-cart">Add to Cart +</button>
-                </div>
-              </div>
-            </div>
+              return (
+                <div className="product-card" key={product.name}>
+                  <div className="product-image">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      loading="lazy"
+                    />
+                    {product.tag && (
+                      <span className="product-tag">{product.tag}</span>
+                    )}
+                  </div>
+                  <div className="product-info">
+                    <p className="product-category">{product.category}</p>
+                    <h3>{product.name}</h3>
+                    <p className="product-description">
+                      {product.description}
+                    </p>
+                    <div className="product-bottom">
+                      <span className="product-price">₹{product.price}</span>
 
-            {/* Product 3 */}
-            <div className="product-card">
-              <div className="product-image">
-                <img
-                  src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=700&q=85"
-                  alt="Hydrating Face Cream"
-                  loading="lazy"
-                />
-              </div>
-              <div className="product-info">
-                <p className="product-category">MOISTURIZER</p>
-                <h3>Hydrating Face Cream</h3>
-                <p className="product-description">
-                  Everyday moisture for soft, comfortable skin.
-                </p>
-                <div className="product-bottom">
-                  <span className="product-price">₹599</span>
-                  <button className="add-to-cart">Add to Cart +</button>
-                </div>
-              </div>
-            </div>
+                      {quantity === 0 ? (
+                        <button
+                          type="button"
+                          className="add-to-cart"
+                          onClick={() => updateCartItem(product, 1)}
+                        >
+                          Add to Cart +
+                        </button>
+                      ) : (
+                        <div className="card-cart-actions">
+                          <button
+                            type="button"
+                            className="add-to-cart card-added-btn"
+                            title="Added to cart"
+                          >
+                            Added ✓
+                          </button>
 
-            {/* Product 4 */}
-            <div className="product-card">
-              <div className="product-image">
-                <img
-                  src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=700&q=85"
-                  alt="Daily Shield Sunscreen"
-                  loading="lazy"
-                />
-                <span className="product-tag">DAILY ESSENTIAL</span>
-              </div>
-              <div className="product-info">
-                <p className="product-category">SUNSCREEN</p>
-                <h3>Daily Shield Sunscreen</h3>
-                <p className="product-description">
-                  An everyday essential for your sun-care routine.
-                </p>
-                <div className="product-bottom">
-                  <span className="product-price">₹549</span>
-                  <button className="add-to-cart">Add to Cart +</button>
+                          <div className="card-quantity-stepper">
+                            <button
+                              type="button"
+                              className="card-qty-btn"
+                              onClick={() =>
+                                updateCartItem(product, quantity - 1)
+                              }
+                              aria-label={`Decrease ${product.name} quantity`}
+                            >
+                              −
+                            </button>
+                            <span className="card-qty-value">{quantity}</span>
+                            <button
+                              type="button"
+                              className="card-qty-btn"
+                              onClick={() =>
+                                updateCartItem(product, quantity + 1)
+                              }
+                              aria-label={`Increase ${product.name} quantity`}
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              )
+            })}
           </div>
         </section>
 
