@@ -59,6 +59,15 @@ function App() {
   const [cart, setCart] = useState(getSavedCart)
 
   useEffect(() => {
+    document.documentElement.removeAttribute('data-theme')
+    try {
+      localStorage.removeItem('lumora-theme')
+    } catch {
+      // ignore
+    }
+  }, [])
+
+  useEffect(() => {
     const syncCart = () => setCart(getSavedCart())
     window.addEventListener('lumora-cart-updated', syncCart)
     window.addEventListener('storage', syncCart)
