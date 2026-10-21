@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Cart from './Cart.jsx'
 import ProductDetails from './ProductDetails.jsx'
 import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
@@ -55,7 +56,7 @@ function App() {
             </svg>
           </button>
 
-          <button className="icon-button cart-icon-button" aria-label="Shopping cart">
+          <Link to="/cart" className="icon-button cart-icon-button" aria-label="Shopping cart">
             <svg viewBox="0 0 24 24" width="21" height="21"
               fill="none" stroke="currentColor" strokeWidth="1.7">
               <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 8H6" />
@@ -65,7 +66,7 @@ function App() {
             {cartCount > 0 && (
               <span className="cart-badge">{cartCount}</span>
             )}
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -363,6 +364,8 @@ function App() {
         path="/product/:productName"
         element={<ProductDetails />}
       />
+
+      <Route path="/cart" element={<Cart />} />
     </Routes>
 
 
