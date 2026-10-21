@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import Cart from './Cart.jsx'
-import ProductDetails from './ProductDetails.jsx'
+import Cart from './pages/Cart.jsx'
+import ProductDetails from './pages/ProductDetails.jsx'
 import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
-import './Shop.css'
-import Shop from './Shop.jsx'
+import Shop from './pages/Shop.jsx'
 import heroImage from './assets/lumora-hero.png'
+import { getSavedCart, saveCart } from './utils/cartUtils.js'
 
 const featuredProducts = [
   {
@@ -46,26 +46,8 @@ const featuredProducts = [
   },
 ]
 
-function getSavedCart() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('lumora-cart'))
-    return Array.isArray(saved) ? saved : []
-  } catch {
-    return []
-  }
-}
-
 function App() {
   const [cart, setCart] = useState(getSavedCart)
-
-  useEffect(() => {
-    document.documentElement.removeAttribute('data-theme')
-    try {
-      localStorage.removeItem('lumora-theme')
-    } catch {
-      // ignore
-    }
-  }, [])
 
   useEffect(() => {
     const syncCart = () => setCart(getSavedCart())
@@ -108,13 +90,8 @@ function App() {
       }
     }
 
-    try {
-      localStorage.setItem('lumora-cart', JSON.stringify(updatedCart))
-      setCart(updatedCart)
-      window.dispatchEvent(new Event('lumora-cart-updated'))
-    } catch (e) {
-      console.error(e)
-    }
+    saveCart(updatedCart)
+    setCart(updatedCart)
   }
 
   return (

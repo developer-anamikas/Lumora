@@ -1,24 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getSavedCart, saveCart } from '../utils/cartUtils.js'
 import './Cart.css'
-
-function getSavedCart() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('lumora-cart'))
-    return Array.isArray(saved) ? saved : []
-  } catch {
-    return []
-  }
-}
-
-function saveCart(cart) {
-  try {
-    localStorage.setItem('lumora-cart', JSON.stringify(cart))
-    window.dispatchEvent(new Event('lumora-cart-updated'))
-  } catch (e) {
-    console.error('Error saving cart:', e)
-  }
-}
 
 function Cart() {
   const [cartItems, setCartItems] = useState(getSavedCart)

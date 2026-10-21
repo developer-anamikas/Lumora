@@ -125,9 +125,6 @@
   );
 
   box-sizing: border-box;
-}
-
-.hero {
   box-shadow: 0 8px 28px rgba(100, 75, 45, 0.07);
 }
 
