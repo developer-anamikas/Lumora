@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import ProductDetails from './ProductDetails.jsx'
 import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
@@ -5,8 +6,29 @@ import './Shop.css'
 import Shop from './Shop.jsx'
 import heroImage from './assets/lumora-hero.png'
 
+function getSavedCartCount() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('lumora-cart'))
+    if (!Array.isArray(saved)) return 0
+    return saved.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0)
+  } catch {
+    return 0
+  }
+}
 
 function App() {
+  const [cartCount, setCartCount] = useState(getSavedCartCount)
+
+  useEffect(() => {
+    const updateCount = () => setCartCount(getSavedCartCount())
+    window.addEventListener('lumora-cart-updated', updateCount)
+    window.addEventListener('storage', updateCount)
+    return () => {
+      window.removeEventListener('lumora-cart-updated', updateCount)
+      window.removeEventListener('storage', updateCount)
+    }
+  }, [])
+
   return (
     <>
       {/* Navigation bar */}
@@ -33,13 +55,16 @@ function App() {
             </svg>
           </button>
 
-          <button className="icon-button" aria-label="Shopping cart">
+          <button className="icon-button cart-icon-button" aria-label="Shopping cart">
             <svg viewBox="0 0 24 24" width="21" height="21"
               fill="none" stroke="currentColor" strokeWidth="1.7">
               <path d="M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 8H6" />
               <circle cx="10" cy="21" r="1" />
               <circle cx="17" cy="21" r="1" />
             </svg>
+            {cartCount > 0 && (
+              <span className="cart-badge">{cartCount}</span>
+            )}
           </button>
         </div>
       </header>
